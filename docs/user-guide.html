@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>DataLemur Sync — User Guide</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 16mm 15mm 18mm;
+      }
+
+      :root {
+        --ink: #14161a;
+        --muted: #5b6472;
+        --line: #dfe3e9;
+        --accent: #2563eb;
+        --lemon: #facc15;
+        --ok: #16a34a;
+        --warn: #b45309;
+        --bad: #dc2626;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font: 10.5pt/1.5 "Segoe UI", -apple-system, Roboto, sans-serif;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      h1 {
+        font-size: 23pt;
+        margin: 0 0 2mm;
+        letter-spacing: -0.4pt;
+      }
+
+      h2 {
+        font-size: 13pt;
+        margin: 9mm 0 3mm;
+        padding-bottom: 1.5mm;
+        border-bottom: 1.5pt solid var(--ink);
+      }
+
+      h3 {
+        font-size: 11pt;
+        margin: 5mm 0 2mm;
+      }
+
+      p {
+        margin: 0 0 2.5mm;
+      }
+
+      code {
+        font-family: Consolas, "SF Mono", monospace;
+        font-size: 9pt;
+        background: #f1f3f6;
+        border: 0.5pt solid var(--line);
+        border-radius: 3pt;
+        padding: 0.3mm 1.2mm;
+      }
+
+      /* ---------- cover ---------- */
+      .cover {
+        border: 1.5pt solid var(--ink);
+        border-radius: 4mm;
+        padding: 9mm 8mm;
+        margin-bottom: 6mm;
+        background: linear-gradient(180deg, #fffdf2 0%, #ffffff 100%);
+      }
+
+      .badge {
+        display: inline-block;
+        background: var(--lemon);
+        border: 1pt solid var(--ink);
+        border-radius: 2mm;
+        font-weight: 700;
+        font-size: 9pt;
+        padding: 1mm 3mm;
+        margin-bottom: 4mm;
+        letter-spacing: 0.5pt;
+      }
+
+      .sub {
+        color: var(--muted);
+        font-size: 11pt;
+        margin: 0;
+      }
+
+      .meta {
+        margin-top: 5mm;
+        padding-top: 3mm;
+        border-top: 0.75pt solid var(--line);
+        font-size: 9pt;
+        color: var(--muted);
+      }
+
+      /* ---------- steps ---------- */
+      ol.steps {
+        counter-reset: step;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      ol.steps > li {
+        counter-increment: step;
+        position: relative;
+        padding: 0 0 4mm 11mm;
+        break-inside: avoid;
+      }
+
+      ol.steps > li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: -0.4mm;
+        width: 7mm;
+        height: 7mm;
+        border-radius: 50%;
+        background: var(--ink);
+        color: #fff;
+        font-weight: 700;
+        font-size: 9pt;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Only the leading label of a step is a block; inline bold stays inline. */
+      ol.steps > li > b:first-child {
+        display: block;
+        margin-bottom: 0.8mm;
+      }
+
+      ul {
+        margin: 1.5mm 0 2.5mm;
+        padding-left: 5mm;
+      }
+
+      li {
+        margin-bottom: 1mm;
+      }
+
+      /* ---------- callouts ---------- */
+      .note {
+        border-left: 2.5pt solid var(--accent);
+        background: #f4f7ff;
+        padding: 3mm 4mm;
+        margin: 3mm 0;
+        border-radius: 0 2mm 2mm 0;
+        break-inside: avoid;
+      }
+
+      .note.warn {
+        border-color: var(--warn);
+        background: #fff8ec;
+      }
+
+      .note.good {
+        border-color: var(--ok);
+        background: #f1fbf4;
+      }
+
+      .note .tag {
+        font-weight: 700;
+        font-size: 9pt;
+        text-transform: uppercase;
+        letter-spacing: 0.6pt;
+        display: block;
+        margin-bottom: 1mm;
+      }
+
+      .note.warn .tag {
+        color: var(--warn);
+      }
+
+      .note.good .tag {
+        color: var(--ok);
+      }
+
+      .note .tag {
+        color: var(--accent);
+      }
+
+      /* ---------- tables ---------- */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 3mm 0 4mm;
+        font-size: 9.5pt;
+      }
+
+      th {
+        background: #eef1f5;
+        text-align: left;
+        font-weight: 700;
+        border: 0.5pt solid var(--line);
+        padding: 2mm 2.5mm;
+      }
+
+      td {
+        border: 0.5pt solid var(--line);
+        padding: 2mm 2.5mm;
+        vertical-align: top;
+      }
+
+      tr {
+        break-inside: avoid;
+      }
+
+      .sym {
+        white-space: nowrap;
+        font-weight: 600;
+      }
+
+      .ok {
+        color: var(--ok);
+        font-weight: 700;
+      }
+
+      .bad {
+        color: var(--bad);
+        font-weight: 700;
+      }
+
+      /* ---------- popup mock ---------- */
+      .mock {
+        border: 1pt solid var(--line);
+        border-radius: 3mm;
+        padding: 4mm;
+        background: #fafbfc;
+        font-size: 9.5pt;
+        break-inside: avoid;
+      }
+
+      .mock .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1.2mm 0;
+        border-bottom: 0.5pt dashed var(--line);
+      }
+
+      .mock .row:last-child {
+        border-bottom: 0;
+      }
+
+      .mock .k {
+        color: var(--muted);
+      }
+
+      .mock .v {
+        font-weight: 600;
+      }
+
+      .flow {
+        display: flex;
+        gap: 2mm;
+        align-items: center;
+        margin: 4mm 0;
+        font-size: 9.5pt;
+        font-weight: 600;
+        break-inside: avoid;
+      }
+
+      .flow span {
+        flex: 1;
+        text-align: center;
+        border: 1pt solid var(--ink);
+        border-radius: 2mm;
+        padding: 2.5mm 1mm;
+        background: #fff;
+      }
+
+      .flow em {
+        font-style: normal;
+        color: var(--muted);
+      }
+
+      .page-break {
+        break-before: page;
+      }
+
+      footer {
+        margin-top: 8mm;
+        padding-top: 3mm;
+        border-top: 0.75pt solid var(--line);
+        font-size: 8.5pt;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="cover">
+      <div class="badge">DL &nbsp;CHROME EXTENSION</div>
+      <h1>DataLemur Sync</h1>
+      <p class="sub">User guide &amp; troubleshooting — save your accepted SQL solutions to GitHub automatically.</p>
+      <div class="meta">
+        Version 1.0.0 &nbsp;·&nbsp; Manifest V3 &nbsp;·&nbsp; No backend server &nbsp;·&nbsp; Your token never
+        leaves this computer
+      </div>
+    </section>
+
+    <h2>1. What this extension does</h2>
+    <p>
+      When you solve a question on DataLemur, this extension reads the problem name, its difficulty and the
+      SQL in the editor, then commits it to a GitHub repository you own — one file per problem, sorted into
+      <code>Easy/</code>, <code>Medium/</code> and <code>Hard/</code> folders, with the repository's
+      <code>README.md</code> kept up to date.
+    </p>
+
+    <div class="flow">
+      <span>Solve on DataLemur</span>
+      <em>&rarr;</em>
+      <span>Submit &amp; get accepted</span>
+      <em>&rarr;</em>
+      <span>Click Sync</span>
+      <em>&rarr;</em>
+      <span>File in your repo</span>
+    </div>
+
+    <p>Solving the same problem again updates the existing file — it never creates a duplicate.</p>
+
+    <h2>2. One-time setup</h2>
+
+    <ol class="steps">
+      <li>
+        <b>Build the extension</b>
+        Open a terminal in the project folder <code>C:\SQL_Sync</code> and run <code>npm install</code>
+        followed by <code>npm run build</code>. This creates the <code>dist</code> folder — that folder is
+        the extension.
+      </li>
+      <li>
+        <b>Load it into Chrome</b>
+        Go to <code>chrome://extensions</code>, turn on <b>Developer mode</b> (top-right switch), click
+        <b>Load unpacked</b>, and select <code>C:\SQL_Sync\dist</code>. Then open the puzzle-piece menu in
+        the toolbar and pin <b>DataLemur Sync</b> so its icon is always visible.
+      </li>
+      <li>
+        <b>Create the destination repository</b>
+        On github.com create a new repository, for example <code>datalemur-solutions</code>. Tick
+        <b>Add a README file</b> when creating it. A completely empty repository has no branch yet and the
+        extension cannot write to it.
+      </li>
+      <li>
+        <b>Create a Personal Access Token</b>
+        Go to <b>github.com/settings/tokens</b> &rarr; <i>Generate new token (classic)</i> &rarr; tick the
+        <code>repo</code> scope. Copy the token immediately — GitHub shows it only once. A fine-grained
+        token also works if you give it <i>Contents: Read and write</i> on that repository.
+      </li>
+      <li>
+        <b>Fill in the settings page</b>
+        The settings page opens by itself after installing. To reopen it later, right-click the extension
+        icon and choose <b>Options</b>. Enter your token, GitHub username, repository name and branch
+        (usually <code>main</code>), then press <b>Save</b>.
+      </li>
+      <li>
+        <b>Press "Test connection"</b>
+        You should see <span class="ok">&#10003; Connected — the repository is writable.</span> If you see
+        anything else, fix it now using the troubleshooting table before going to DataLemur.
+      </li>
+    </ol>
+
+    <div class="note warn">
+      <span class="tag">Important</span>
+      <b>Save</b> and <b>Test connection</b> are two different buttons. Testing does not save. If you only
+      test and then close the page, your settings are gone.
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. Everyday use</h2>
+
+    <ol class="steps">
+      <li>
+        <b>Open a question on DataLemur</b>
+        Log in and open any SQL question. The address must look like
+        <code>datalemur.com/questions/some-question-name</code>. The extension stays inactive on the
+        question list, the blog and every other site — that is deliberate.
+      </li>
+      <li>
+        <b>Click the extension icon</b>
+        A small panel opens. Even before you submit anything, it already reads the page:
+      </li>
+    </ol>
+
+    <div class="mock">
+      <div class="row"><span class="k">Status (top-right)</span><span class="v" style="color: #b45309">Not accepted yet — sync anyway</span></div>
+      <div class="row"><span class="k">Problem</span><span class="v">Histogram of Tweets</span></div>
+      <div class="row"><span class="k">Difficulty</span><span class="v">Easy</span></div>
+      <div class="row"><span class="k">Repository</span><span class="v">yourname/datalemur-solutions (main)</span></div>
+      <div class="row"><span class="k">Path</span><span class="v">Easy/Histogram of Tweets.sql</span></div>
+    </div>
+
+    <div class="note">
+      <span class="tag">This is normal</span>
+      The orange <i>"Not accepted yet"</i> message is not an error. It only means you have not yet submitted
+      a correct answer on this page. Everything else is already working.
+    </div>
+
+    <!-- Continues the list interrupted by the panel mock; CSS counters ignore @start. -->
+    <ol class="steps" style="counter-reset: step 2">
+      <li>
+        <b>Write your query and submit it on DataLemur</b>
+        Use the website's own Run / Submit button. The extension is not involved in this step.
+      </li>
+      <li>
+        <b>Wait for the green tick</b>
+        When DataLemur reports your answer is correct, a small green <b>&#10003;</b> badge appears on the
+        extension icon, and the panel's status changes to
+        <span class="ok">&#10003; Ready to Sync</span>.
+      </li>
+      <li>
+        <b>Optional: press Preview</b>
+        This shows the exact file that will be committed — three comment lines (problem name, difficulty,
+        link back to the question) followed by your query. Press <b>Preview</b> again to hide it.
+      </li>
+      <li>
+        <b>Press Sync</b>
+        A notification confirms <span class="ok">&#10003; Solution Synced</span>. Open your repository on
+        github.com: the <code>.sql</code> file is in its difficulty folder and <code>README.md</code> has
+        been rewritten with your new totals.
+      </li>
+    </ol>
+
+    <h3>What each panel button does</h3>
+    <table>
+      <tr>
+        <th style="width: 24mm">Button</th>
+        <th>Effect</th>
+      </tr>
+      <tr>
+        <td><b>Sync</b></td>
+        <td>Commits the current solution to GitHub and updates the repository README. Disabled until settings are complete and SQL has been detected.</td>
+      </tr>
+      <tr>
+        <td><b>Preview</b></td>
+        <td>Shows exactly what will be committed. Reads nothing from the internet and changes nothing.</td>
+      </tr>
+      <tr>
+        <td><b>Settings</b></td>
+        <td>Opens the options page (token, username, repository, branch, auto-sync, developer logging).</td>
+      </tr>
+    </table>
+
+    <h3>Automatic syncing</h3>
+    <p>
+      In Settings, tick <b>Sync automatically when a submission is accepted</b>. From then on you never
+      press Sync — the moment DataLemur accepts an answer, it is committed. The same solution is never
+      committed twice, so re-rendering the page cannot create repeat commits.
+    </p>
+
+    <h3>The Progress panel</h3>
+    <p>
+      The bottom of the panel counts what <i>this browser</i> has synced: total, Easy, Medium, Hard and the
+      time of the last sync. It is a local counter, not a reading of your repository. <b>Reset progress</b>
+      in Settings clears these numbers and never touches anything on GitHub.
+    </p>
+
+    <div class="page-break"></div>
+
+    <h2>4. Troubleshooting</h2>
+
+    <h3>Messages in the panel</h3>
+    <table>
+      <tr>
+        <th style="width: 52mm">What you see</th>
+        <th>What it means and what to do</th>
+      </tr>
+      <tr>
+        <td class="sym">Open a DataLemur question</td>
+        <td>
+          You are not on a <code>/questions/&lt;name&gt;</code> page — or the tab was already open when you
+          installed or reloaded the extension. <b>Reload the tab</b> (F5) and try again.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym">Waiting for the editor…</td>
+        <td>
+          The page loaded but the SQL editor has not appeared yet, or it is empty. Type something into the
+          SQL box, then close and reopen the panel.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym">Settings required</td>
+        <td>
+          Token, username, repository or branch is missing. Open Settings, complete every field and press
+          <b>Save</b>.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym">Not accepted yet — sync anyway</td>
+        <td>
+          Normal before you submit a correct answer. Sync still works if you press it — useful if DataLemur
+          changes its result banner and the tick stops appearing.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym">Sync button greyed out</td>
+        <td>Either no SQL was detected on the page, or the settings are incomplete. Check both.</td>
+      </tr>
+      <tr>
+        <td class="sym">Already exists</td>
+        <td>
+          Not an error. The file on GitHub is already identical to your current solution, so nothing was
+          committed.
+        </td>
+      </tr>
+    </table>
+
+    <h3>Errors reported as notifications</h3>
+    <table>
+      <tr>
+        <th style="width: 52mm">Message</th>
+        <th>Cause and fix</th>
+      </tr>
+      <tr>
+        <td class="sym bad">Invalid or expired GitHub token</td>
+        <td>
+          The token is mistyped, was revoked, or has expired. Generate a new one and paste it again. Make
+          sure there is no trailing space.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym bad">Repository not found</td>
+        <td>
+          One of three things: the username or repository name is spelled wrong; the branch name is wrong
+          (<code>main</code> vs <code>master</code>); or the repository has no commits yet. Open the repo on
+          github.com and copy the exact values from the address bar.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym bad">Permission denied</td>
+        <td>
+          The token is valid but not allowed to write. Classic tokens need the <code>repo</code> scope;
+          fine-grained tokens need <i>Contents: Read and write</i> and must list this repository under
+          repository access.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym bad">GitHub rate limit reached</td>
+        <td>Too many requests in a short window. Wait a few minutes and sync again.</td>
+      </tr>
+      <tr>
+        <td class="sym bad">Network error</td>
+        <td>
+          No internet, a VPN or a firewall blocking <code>api.github.com</code>. The extension already
+          retried three times before showing this.
+        </td>
+      </tr>
+      <tr>
+        <td class="sym bad">Something went wrong while syncing</td>
+        <td>
+          An unexpected response from GitHub. Open the service worker console (see below) — the exact
+          reason is printed there.
+        </td>
+      </tr>
+    </table>
+
+    <h3>Wrong information was detected</h3>
+    <table>
+      <tr>
+        <th style="width: 52mm">Symptom</th>
+        <th>Explanation</th>
+      </tr>
+      <tr>
+        <td>Difficulty says Medium but the question is Easy</td>
+        <td>
+          The difficulty label could not be read, so the extension used a safe default rather than refusing
+          to sync. The file is committed correctly, just in the wrong folder — move it on GitHub.
+        </td>
+      </tr>
+      <tr>
+        <td>The problem name looks like a URL slug</td>
+        <td>
+          The title could not be read from the page, so the extension built one from the address. The sync
+          still works.
+        </td>
+      </tr>
+      <tr>
+        <td>The green tick never appears after a correct answer</td>
+        <td>
+          DataLemur changed the wording of its result banner. Press <b>Sync</b> manually — it is never
+          blocked by this.
+        </td>
+      </tr>
+    </table>
+
+    <div class="note good">
+      <span class="tag">Design note</span>
+      The extension is built to degrade rather than fail. Whenever it cannot read something from the page,
+      it falls back to a sensible default and still lets you sync — you never lose a solution because a
+      website changed its layout.
+    </div>
+
+    <h3>Looking at the logs</h3>
+    <p>
+      Open Settings and tick <b>Developer logging in the console</b>. Every message is prefixed with
+      <code>[DataLemur Sync]</code>. There are two separate consoles:
+    </p>
+    <ul>
+      <li>
+        <b>Page console</b> — press F12 on the DataLemur tab. Shows what was read from the page:
+        <code>Extracting DOM…</code>, <code>Parsed problem {…}</code>, <code>Submission accepted</code>.
+      </li>
+      <li>
+        <b>Extension console</b> — go to <code>chrome://extensions</code> and click the
+        <b>service worker</b> link on the DataLemur Sync card. Shows the GitHub side:
+        <code>Verifying repository access…</code>, <code>Uploading…</code>, <code>Success</code>, and the
+        detail of any failure.
+      </li>
+    </ul>
+    <p>
+      The service worker goes to sleep after about thirty seconds of inactivity and its console goes quiet.
+      That is normal Chrome behaviour — syncing wakes it up again.
+    </p>
+
+    <h3>After changing the code</h3>
+    <p>
+      Run <code>npm run build</code>, then press the circular reload arrow on the extension card in
+      <code>chrome://extensions</code>, then reload the DataLemur tab. All three steps are needed: an
+      already-open page keeps running the old copy of the extension.
+    </p>
+
+    <h2>5. Privacy</h2>
+    <ul>
+      <li>Your token is stored only in this browser's local extension storage. It is never synced to your Google account and never sent to any server other than <code>api.github.com</code>.</li>
+      <li>The token is never printed to a console, never written into a committed file, and never given to the DataLemur page.</li>
+      <li>The extension can only read <code>datalemur.com</code> and talk to <code>api.github.com</code>. It has no other access.</li>
+      <li>There is no analytics, no tracking and no remote code of any kind.</li>
+    </ul>
+
+    <footer>
+      DataLemur Sync 1.0.0 — user guide. Project folder: C:\SQL_Sync · See <code>README.md</code> for
+      developer documentation and <code>docs/TESTING.md</code> for the full test checklist.
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "datalemur-sync",
+  "version": "1.0.0",
+  "description": "Chrome extension that syncs accepted DataLemur SQL solutions to a GitHub repository.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run icons && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "icons": "node scripts/gen-icons.mjs",
+    "test": "esbuild src/selfcheck.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/selfcheck.mjs && node node_modules/.cache/selfcheck.mjs",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.{ts,css,html}\" \"*.{json,md}\""
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.7.1",
+    "@types/chrome": "^0.0.287",
+    "@types/node": "^26.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^8.57.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "vite": "^7.0.0"
+  }
+}

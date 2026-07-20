@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>DataLemur Sync — Settings</title>
+    <link rel="stylesheet" href="../styles/theme.css" />
+    <link rel="stylesheet" href="./options.css" />
+  </head>
+  <body>
+    <main class="options">
+      <header>
+        <h1>DataLemur Sync</h1>
+        <p class="label">
+          Credentials are stored with the Chrome Storage API on this device only and are never sent anywhere
+          except api.github.com.
+        </p>
+      </header>
+
+      <form id="form" class="card" autocomplete="off">
+        <label>
+          <span>GitHub Personal Access Token</span>
+          <input id="token" type="password" placeholder="ghp_… or github_pat_…" required />
+          <small
+            >Needs the <code>repo</code> scope (classic) or
+            <code>Contents: read &amp; write</code> (fine-grained).</small
+          >
+        </label>
+
+        <label>
+          <span>GitHub Username</span>
+          <input id="username" type="text" placeholder="octocat" required />
+        </label>
+
+        <label>
+          <span>Repository Name</span>
+          <input id="repo" type="text" placeholder="datalemur-solutions" required />
+        </label>
+
+        <label>
+          <span>Default Branch</span>
+          <input id="branch" type="text" placeholder="main" required />
+        </label>
+
+        <label class="check">
+          <input id="autoSync" type="checkbox" />
+          <span>Sync automatically when a submission is accepted</span>
+        </label>
+
+        <label class="check">
+          <input id="devMode" type="checkbox" />
+          <span>Developer logging in the console</span>
+        </label>
+
+        <div class="actions">
+          <button type="submit" class="primary">Save</button>
+          <button type="button" id="test">Test connection</button>
+          <button type="button" id="reset" class="danger">Reset progress</button>
+        </div>
+
+        <p id="status" class="status" data-tone="muted"></p>
+      </form>
+    </main>
+
+    <script type="module" src="./options.ts"></script>
+  </body>
+</html>
