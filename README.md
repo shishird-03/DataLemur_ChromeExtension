@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # DataLemur_ChromeExtension
 =======
 # DataLemur Sync
@@ -13,12 +12,6 @@ Medium/Users Third Transaction.sql
 Hard/Card Launch Success.sql
 README.md          ← regenerated on every sync
 ```
-
-## Screenshots
-
-| Popup                                                            | Settings                           |
-| ---------------------------------------------------------------- | ---------------------------------- |
-| _`assets/screenshots/popup.png` — replace with your own capture_ | _`assets/screenshots/options.png`_ |
 
 ## Features
 
