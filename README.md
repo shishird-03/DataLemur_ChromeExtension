@@ -1,80 +1,97 @@
-# DataLemur_ChromeExtension
-=======
-# DataLemur Sync
+<p align="center">
+  <img src="assets/icons/icon128.png" alt="DataLemur Sync logo" width="96" />
+</p>
 
-A Manifest V3 Chrome extension that pushes your accepted [DataLemur](https://datalemur.com)
-SQL solutions straight into a GitHub repository — no backend, no third-party service.
-Your token stays in Chrome storage and the only host the extension talks to is `api.github.com`.
+<h1 align="center">DataLemur Sync</h1>
+
+<p align="center">
+  <strong>🔥 Ship your DataLemur SQL grind straight to GitHub — no server, no dependencies, just your token and the API.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Manifest-V3-blue?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Manifest V3" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Dependencies-Zero-success?style=for-the-badge" alt="Zero Dependencies" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License" />
+</p>
+
+---
+
+A **Manifest V3 Chrome extension** that watches your [DataLemur](https://datalemur.com) SQL submissions, detects accepted verdicts in real time, and pushes solutions into a GitHub repository — organised by difficulty, with an auto-generated README. Your token stays in `chrome.storage.local` and the only host the extension talks to is `api.github.com`.
 
 ```
-Easy/Histogram of Tweets.sql
-Medium/Users Third Transaction.sql
-Hard/Card Launch Success.sql
-README.md          ← regenerated on every sync
+📂 your-solutions-repo/
+├── Easy/
+│   └── Histogram of Tweets.sql
+├── Medium/
+│   └── Users Third Transaction.sql
+├── Hard/
+│   └── Card Launch Success.sql
+└── README.md          ← regenerated on every sync
 ```
 
-## Features
+## ✨ Features
 
-- Activates only on `https://datalemur.com/questions/...`
-- Extracts problem title, difficulty and the SQL in the editor with selector-tolerant parsing
-  (CodeMirror 5/6, Monaco, Ace and plain textareas are all supported)
-- Detects an accepted verdict via `MutationObserver` and shows **✓ Ready to Sync** plus a toolbar badge
-- One-click **Sync**, with **Preview** showing the exact file that will be committed
-- Optional **auto-sync** the moment a submission is accepted
-- Files land in `Easy/`, `Medium/` or `Hard/`; existing files are updated in place (correct SHA
-  handling), never duplicated
-- `README.md` in the target repo is regenerated after every sync with totals and a solutions table
-- Progress panel: total solved, per-difficulty counts and last sync time
-- Chrome notifications for success, "already exists", and every failure mode
-- Developer logging (`[DataLemur Sync] …`) behind a settings toggle
-- Light and dark themes, keyboard-focusable, responsive popup
+| | Feature | Details |
+|---|---|---|
+| 🎯 | **Smart Detection** | Activates only on `datalemur.com/questions/...` — never fires on unrelated pages |
+| 🔍 | **Universal Editor Support** | Extracts SQL from CodeMirror 5/6, Monaco, Ace, and plain `<textarea>` with selector-tolerant parsing |
+| ✅ | **Verdict Tracking** | Detects accepted submissions via `MutationObserver` and shows **✓ Ready to Sync** with a toolbar badge |
+| ⚡ | **One-Click or Zero-Click Sync** | Manual **Sync** button with a live **Preview**, or enable **auto-sync** to commit the moment you pass |
+| 📁 | **Difficulty-Sorted Organisation** | Solutions land in `Easy/`, `Medium/`, or `Hard/` — existing files are updated in place (SHA-aware), never duplicated |
+| 📊 | **Auto-Generated README** | `README.md` in your target repo is regenerated after every sync with totals and a solutions table |
+| 📈 | **Progress Dashboard** | Total solved, per-difficulty counts, and last sync time — all in the popup |
+| 🔔 | **Chrome Notifications** | Toast for success, "already exists", and every failure mode |
+| 🌗 | **Light & Dark Themes** | Keyboard-focusable, responsive popup with full theme support |
+| 🛠️ | **Developer Logging** | Verbose `[DataLemur Sync] …` console logging behind a settings toggle |
 
-## Installation
+## 🛠️ Tech Stack
 
-1. **Build it**
+| Layer | Technology |
+|-------|-----------|
+| **Language** | TypeScript 5.7 (strict) |
+| **Build** | Vite 7 + `@crxjs/vite-plugin` |
+| **Extension API** | Chrome Manifest V3 |
+| **Linting** | ESLint + Prettier |
+| **Testing** | Custom self-check suite (esbuild + Node `assert`) |
+| **Runtime deps** | **Zero** — ships no third-party code |
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** ≥ 18
+- **npm** ≥ 9
+- A **GitHub repository** (already created, with at least one commit)
+- A **GitHub Personal Access Token** — [Classic](https://github.com/settings/tokens) with `repo` scope, or [Fine-grained](https://github.com/settings/personal-access-tokens) with **Contents: Read and write**
+
+### Installation
+
+1. **Clone & Build**
 
    ```bash
+   git clone https://github.com/<your-username>/DataLemur_ChromeExtension.git
+   cd DataLemur_ChromeExtension
    npm install
    npm run build
    ```
 
-2. **Load it** — open `chrome://extensions`, enable **Developer mode**, click
-   **Load unpacked** and select the generated `dist/` folder.
+2. **Load the Extension** — open `chrome://extensions`, enable **Developer mode**, click **Load unpacked** and select the generated `dist/` folder.
 
-3. **Create a GitHub token**
-   - Classic: <https://github.com/settings/tokens> → scope **`repo`**
-   - Fine-grained: <https://github.com/settings/personal-access-tokens> → repository access limited
-     to your solutions repo, permission **Contents: Read and write**
+3. **Configure** — the options page opens automatically on first install (or right-click the icon → _Options_). Enter your token, GitHub username, repository name, and default branch, then hit **Test connection**.
 
-4. **Configure** — the options page opens on first install (or right-click the icon → _Options_).
-   Enter the token, your username, the repository name and its default branch, then hit
-   **Test connection**. The repository must already exist and have at least one commit.
+4. **Solve & Sync** — solve a question on DataLemur, submit, and the toolbar badge turns into ✓. Open the popup and press **Sync**.
 
-5. **Use it** — solve a question on DataLemur, submit, and the toolbar badge turns into ✓.
-   Open the popup and press **Sync**.
+## 💡 Usage Notes
 
-## Usage notes
-
-- **Sync before acceptance** is allowed — the popup warns you but does not block it, which is
-  useful when a site UI change makes verdict detection miss.
+- **Sync before acceptance** is allowed — the popup warns you but does not block it, useful when a site UI change makes verdict detection miss.
 - **Re-syncing** an unchanged solution commits nothing and reports _Already exists_.
-- **Progress counts** are stored locally. They describe what this browser has synced, not what is
-  in the repository; _Reset progress_ in settings clears them without touching GitHub.
+- **Progress counts** are stored locally. They describe what this browser has synced, not what is in the repository; _Reset progress_ in settings clears them without touching GitHub.
 
-## Development
+## 🏗️ Architecture
 
-```bash
-npm run dev      # Vite dev server with HMR for the popup/options pages
-npm run build    # icons + typecheck + production bundle into dist/
-npm test         # self-check over path building, README rendering, Base64, error mapping
-npm run lint     # ESLint
-npm run format   # Prettier
-```
-
-`npm run dev` still requires the extension to be loaded from `dist/`; run a build once first,
-then keep the dev server running for fast UI iteration.
-
-### Project layout
+### Project Layout
 
 ```
 src/
@@ -90,7 +107,7 @@ src/
 scripts/         icon generator (no image dependency)
 ```
 
-### Architecture
+### System Diagram
 
 ```mermaid
 flowchart LR
@@ -126,59 +143,73 @@ flowchart LR
     BG -- badge + notifications --> User((You))
 ```
 
-The rule that keeps this honest: **only the service worker holds the token**. The content script
-runs in a hostile page and never sees credentials; the popup reads settings only to display the
-repository name.
+> **Security invariant:** Only the service worker holds the token. The content script runs in a hostile page and never sees credentials; the popup reads settings only to display the repository name.
 
-### Adding another site
+## 🔌 Extending — Adding Another Site
+
+The parser system is fully pluggable. To add a new site:
 
 1. Implement `SiteParser` (`src/parsers/SiteParser.ts`) — `matches`, `parse`, `isAccepted`.
-   `readEditorText()` and `hasAcceptedVerdict()` already cover most sites.
+   `readEditorText()` and `hasAcceptedVerdict()` already cover most editors.
 2. Register the class in `src/parsers/index.ts`.
 3. Add the origin to `content_scripts.matches` and `host_permissions` in `manifest.json`.
 
-Nothing else changes: storage, sync, README generation and the UI are site-agnostic.
+Nothing else changes — storage, sync, README generation, and the UI are all site-agnostic.
 
-## Error handling
+## ⚠️ Error Handling
 
-| Situation                           | What you see                                                      |
-| ----------------------------------- | ----------------------------------------------------------------- |
-| Token missing / incomplete settings | _Open Settings and add your GitHub token…_                        |
-| 401                                 | _Invalid or expired GitHub token._                                |
-| 404                                 | _Repository not found. Check the username, repo name and branch._ |
-| 403 with quota left                 | _Permission denied. The token needs the `repo` scope._            |
-| 403/429 with quota exhausted        | _GitHub rate limit reached._                                      |
-| 409/422 SHA mismatch                | Automatically refetches the SHA and retries once                  |
-| Offline / DNS failure               | _Network error._ Request is retried 3× with exponential backoff   |
-| 5xx                                 | Retried 3× with exponential backoff, then reported                |
+Every failure mode has a precise, user-facing message:
 
-A README update that fails never fails the sync — the solution file is already committed.
+| Situation | What You See |
+|---|---|
+| Token missing / incomplete settings | _Open Settings and add your GitHub token…_ |
+| `401` | _Invalid or expired GitHub token._ |
+| `404` | _Repository not found. Check the username, repo name and branch._ |
+| `403` with quota left | _Permission denied. The token needs the `repo` scope._ |
+| `403` / `429` with quota exhausted | _GitHub rate limit reached._ |
+| `409` / `422` SHA mismatch | Automatically refetches the SHA and retries once |
+| Offline / DNS failure | _Network error._ Request is retried 3× with exponential backoff |
+| `5xx` | Retried 3× with exponential backoff, then reported |
 
-## Testing
+> A README update that fails **never** fails the sync — the solution file is already committed.
 
-`npm test` covers the pure logic. Browser behaviour is covered by the manual checklist in
-[docs/TESTING.md](docs/TESTING.md).
+## 🧪 Testing
 
-## Roadmap
+```bash
+npm test         # self-check: path building, README rendering, Base64, error mapping
+npm run lint     # ESLint
+npm run format   # Prettier
+```
 
-- LeetCode, HackerRank and StrataScratch parsers (the interface is already in place)
-- Commit batching / single commit per session via the Git Trees API
-- Per-problem notes and runtime stats in the file header
-- Optional gist target for people without a dedicated repo
-- Import existing repository contents to seed local progress counts
+`npm test` covers the pure logic. Browser behaviour is covered by the manual checklist in [docs/TESTING.md](docs/TESTING.md).
 
-## Contributing
+## 🗺️ Roadmap
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+- [ ] **LeetCode parser** — the `SiteParser` interface is already in place
+- [ ] **HackerRank parser**
+- [ ] **StrataScratch parser**
+- [ ] Commit batching / single commit per session via the Git Trees API
+- [ ] Per-problem notes and runtime stats in the file header
+- [ ] Optional gist target for people without a dedicated repo
+- [ ] Import existing repository contents to seed local progress counts
 
-## Privacy & security
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, ground rules, and the "add a parser" walkthrough.
+
+## 🔒 Privacy & Security
 
 - The token is written to `chrome.storage.local` only — never `storage.sync`, never a remote server.
 - The token is never logged, never sent to the content script, and never placed in a URL.
 - `host_permissions` are limited to `datalemur.com` and `api.github.com`.
-- No analytics, no telemetry, no remote code.
+- **No analytics, no telemetry, no remote code.**
 
-## License
+## 📄 License
 
-MIT
->>>>>>> e094182 (All the necessary local changes wrt to extension)
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ for the SQL grind. Star ⭐ if it saves you time!</sub>
+</p>
